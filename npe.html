@@ -12,24 +12,22 @@ body {
 
 .container {
 	-webkit-perspective: 1000;
-	-webkit-transform-style: preserve-3d;
 }
 
 .box {
-	-webkit-transform-style: preserve-3d;
 	margin-top: 50px;
 	margin-left: 100px;
 }
 
 .leaf {
 	position: absolute;
-    	-webkit-transform-style: preserve-3d;
 }
 
 .leaf .poster {
+	-webkit-transform-origin: 0px;
 	-webkit-transform: rotate3d(0, 1, 0, 7deg);
-	-webkit-transition-property: -webkit-transform;
-  	-webkit-transition-duration: 0.5s;
+	-webkit-transition-property: -webkit-transform, opacity;
+  	-webkit-transition-duration: 0.5s, 0.5s;
 }
 
 .leaf.one .poster {
@@ -37,24 +35,22 @@ body {
 }
 
 .leaf.one.initial .poster {
-	-webkit-transform: rotate3d(0, 1, 0, 105deg);
+	-webkit-transform: rotate3d(0, 1, 0, 90deg);
 }
 
 .leaf .poster img {
 	-webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), color-stop(0.75, rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.40)));
-	-webkit-transition-property: opacity;
-  	-webkit-transition-duration: 0.5s;
 }
 
 .leaf.zero {
 	-webkit-transform: translate3d(-200px, -50px, 300px);
 }
 
-.leaf.zero .poster img {
+.leaf.zero .poster {
 	opacity: 0;
 }
 
-.leaf.initial .poster img {
+.leaf.initial .poster {
 	opacity: 0;
 }
 
@@ -113,7 +109,7 @@ body {
 	-webkit-transform: translate3d(1700px, 400px, -2400px);
 }
 
-.leaf.infinity .poster img {
+.leaf.infinity .poster {
 	opacity: 0;
 }
 
@@ -177,12 +173,12 @@ function adjustSpeed(speed, min, max) {
 
 function open() {
 	setTimeout(function() {
-		adjustSpeed(0.25, 0.0, 5.0);
+		adjustSpeed(0.30, 0.0, 5.0);
 		$('.one.initial').removeClass('initial');
-		adjustSpeed(0.75, 0.0, 5.0);
+		adjustSpeed(0.50, 0.0, 5.0);
 		$('.initial').each(function(i) {
 			var e = $(this);
-			setTimeout(function() { e.removeClass('initial') }, 50 * i);
+			setTimeout(function() { e.removeClass('initial') }, 250 + 30 * i);
 		});
 	}, 0.00);
 }
