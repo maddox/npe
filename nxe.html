@@ -1,0 +1,243 @@
+<html>
+<head>
+<style>
+body {
+  background-color: black;
+  color: white;
+  font-family: 'Lucida Grande', Verdana, Arial;
+  font-size: 12px;
+  background-repeat: no-repeat;
+	overflow: hidden;
+}
+
+.container {
+	-webkit-perspective: 1000;
+	-webkit-transform-style: preserve-3d;
+}
+
+.box {
+	-webkit-transform-style: preserve-3d;
+	margin-top: 50px;
+	margin-left: 100px;
+}
+
+.leaf {
+	position: absolute;
+    	-webkit-transform-style: preserve-3d;
+}
+
+.leaf .poster {
+	-webkit-transform: rotate3d(0, 1, 0, 7deg);
+	-webkit-transition-property: -webkit-transform;
+  	-webkit-transition-duration: 0.5s;
+}
+
+.leaf.one .poster {
+	-webkit-transform: rotate3d(0, 1, 0, 0deg);
+}
+
+.leaf.one.initial .poster {
+	-webkit-transform: rotate3d(0, 1, 0, 105deg);
+}
+
+.leaf .poster img {
+	-webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), color-stop(0.75, rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0.40)));
+	-webkit-transition-property: opacity;
+  	-webkit-transition-duration: 0.5s;
+}
+
+.leaf.zero {
+	-webkit-transform: translate3d(-200px, -50px, 300px);
+}
+
+.leaf.zero .poster img {
+	opacity: 0;
+}
+
+.leaf.initial .poster img {
+	opacity: 0;
+}
+
+.leaf.one {
+	-webkit-transform: translate3d(0px, 0px, 0px);
+}
+
+.leaf.one.initial {
+	-webkit-transform: translate3d(0px, 0px, 0px);
+}
+
+.leaf.one.initial .poster img {
+}
+
+.leaf.two {
+	-webkit-transform: translate3d(200px, 50px, -300px);
+}
+
+.leaf.two.initial {
+	-webkit-transform: translate3d(-100px, 50px, -300px);
+}
+
+.leaf.three {
+	-webkit-transform: translate3d(450px, 100px, -650px);
+}
+
+.leaf.three.initial {
+	-webkit-transform: translate3d(-200px, 100px, -650px);
+}
+
+.leaf.four {
+	-webkit-transform: translate3d(700px, 150px, -950px);
+}
+
+.leaf.four.initial {
+	-webkit-transform: translate3d(-300px, 150px, -950px);
+}
+
+.leaf.five {
+	-webkit-transform: translate3d(1000px, 250px, -1450px);
+}
+
+.leaf.five.initial {
+	-webkit-transform: translate3d(-400px, 250px, -1450px);
+}
+
+.leaf.six {
+	-webkit-transform: translate3d(1300px, 300px, -1800px);
+}
+
+.leaf.six.initial {
+	-webkit-transform: translate3d(-500px, 300px, -1800px);
+}
+
+.leaf.infinity {
+	-webkit-transform: translate3d(1700px, 400px, -2400px);
+}
+
+.leaf.infinity .poster img {
+	opacity: 0;
+}
+
+.leaf.subzero {
+	display: none;
+}
+
+.leaf.superinfinity {
+	display: none;
+}
+
+</style>
+</head>
+<body>
+<script src="jquery-1.3.2.min.js"></script>
+<script>
+
+var lastPressTime = 0;
+
+$(document).ready(function(){
+	open();
+	registerKeyHandler();
+});
+
+function registerKeyHandler() {
+	$(document).keydown(function(e){
+		var pressTime = new Date().getTime();
+		var dPressTime = (pressTime - lastPressTime) / 1000.0;
+		switch(e.keyCode){
+			case 37:
+				prev(dPressTime);
+				break;
+			case 39:
+				next(dPressTime);
+				break;
+		}
+		lastPressTime = pressTime;
+	});
+}
+
+function switchClass(oldClass, newClass) {
+	var e = $('.leaf.' + oldClass);
+	e.removeClass(oldClass);
+	e.addClass(newClass);
+}
+
+function switchClassForElement(e, oldClass, newClass) {
+	e.removeClass(oldClass);
+	e.addClass(newClass);
+}
+
+function adjustSpeed(speed, min, max) {
+	speed = Math.max(Math.min(max, speed), min);
+	var rules = document.styleSheets[0].cssRules;
+	for (var i = 0; i < rules.length; i ++) {
+		if (rules[i].selectorText == '.leaf' || rules[i].selectorText == '.leaf .poster img' || rules[i].selectorText == '.leaf .poster') {
+			rules[i].style.webkitTransitionDuration = speed + "s"; 			
+		}
+	}	
+}
+
+function open() {
+	setTimeout(function() {
+		adjustSpeed(0.25, 0.0, 5.0);
+		$('.one.initial').removeClass('initial');
+		adjustSpeed(0.75, 0.0, 5.0);
+		$('.initial').each(function(i) {
+			var e = $(this);
+			setTimeout(function() { e.removeClass('initial') }, 50 * i);
+		});
+	}, 0.00);
+}
+
+function next(speed) {
+	adjustSpeed(speed, 0.1, 0.5);
+	
+	var oldZero = $('.leaf.subzero');
+
+	switchClass('zero', 'subzero');
+	switchClass('one', 'zero');
+	switchClass('two', 'one');
+	switchClass('three', 'two');
+	switchClass('four', 'three');
+	switchClass('five', 'four');
+	switchClass('six', 'five');
+	switchClass('infinity', 'six');
+	switchClass('superinfinity', 'infinity');
+	
+	switchClassForElement(oldZero, 'subzero', 'superinfinity');
+}
+
+function prev(speed) {
+	adjustSpeed(speed, 0.1, 0.5);
+	
+	var oldInfinity = $('.leaf.superinfinity');
+
+	switchClass('infinity', 'superinfinity');
+	switchClass('six', 'infinity');
+	switchClass('five', 'six');
+	switchClass('four', 'five');
+	switchClass('three', 'four');
+	switchClass('two', 'three');
+	switchClass('one', 'two');
+	switchClass('zero', 'one');
+	switchClass('subzero', 'zero');
+
+	switchClassForElement(oldInfinity, 'superinfinity', 'subzero');
+}
+</script>
+
+<div class="container">
+  <div class="box">
+    <div class="leaf subzero"><div class="poster"><img src="images/tt0381849_h.jpg"/></div></div>
+    <div class="leaf zero initial"><div class="poster"><img src="images/tt0083658_h.jpg"/></div></div>
+    <div class="leaf one initial"><div class="poster"><img src="images/tt0325980_h.jpg"/></div></div>
+    <div class="leaf two initial"><div class="poster"><img src="images/tt0337978_h.jpg"/></div></div>
+    <div class="leaf three initial"><div class="poster"><img src="images/tt0372784_h.jpg"/></div></div>
+    <div class="leaf four initial"><div class="poster"><img src="images/tt0424823_h.jpg"/></div></div>
+    <div class="leaf five initial"><div class="poster"><img src="images/tt0762107_h.jpg"/></div></div>
+    <div class="leaf six initial"><div class="poster"><img src="images/tt0765443_h.jpg"/></div></div>
+    <div class="leaf infinity"><div class="poster"><img src="images/tt0432021_h.jpg"/></div></div>
+    <div class="leaf superinfinity"><div class="poster"><img src="images/tt0480249_h.jpg"/></div></div>
+  </div>
+</div>
+
+</body>
+</html>
