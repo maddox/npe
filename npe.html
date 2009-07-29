@@ -28,11 +28,11 @@ body {
 	-webkit-transform: rotate3d(0, 1, 0, 7deg);
 	-webkit-transition-property: -webkit-transform, opacity;
   	-webkit-transition-duration: 0.5s, 0.5s;
-	-webkit-box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
 }
 
 .leaf.one .poster {
 	-webkit-transform: rotate3d(0, 1, 0, 0deg);
+	-webkit-box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
 }
 
 .leaf.one.initial .poster {
@@ -185,7 +185,7 @@ function open() {
 }
 
 function next(speed) {
-	adjustSpeed(speed, 0.1, 0.5);
+	adjustSpeed(speed, 0.10, 0.5);
 	
 	var oldZero = $('.leaf.subzero');
 
@@ -203,7 +203,7 @@ function next(speed) {
 }
 
 function prev(speed) {
-	adjustSpeed(speed, 0.1, 0.5);
+	adjustSpeed(speed, 0.10, 0.5);
 	
 	var oldInfinity = $('.leaf.superinfinity');
 
